@@ -1,4 +1,4 @@
-Package: animalBreeding
+Package: breedingCalculator
 Type: Package
 Title: Sample size calculation for animal breeding experiments
 Version: 0.1.0
