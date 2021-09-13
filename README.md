@@ -86,6 +86,15 @@ n_breedings_multi <- multiGenotype(
 n_breedings_multi
 str(n_breedings_multi)
 ```
-## Overview  and plots
+## Overview and plots
 
+How many animals (in total) should be expected to be born with the breeding setup from above?
+```{r expect born simple}
+expectBorn(n_breedings_multi)
+```
+
+How does the cofidence change based on the number of matings we execute? Maybe, there is a more optimal choice? Especially relevant for small breedings.
+```{r}
+probabilitiesPlots(n_breedings_multi)
+```
 
