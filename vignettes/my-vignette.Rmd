@@ -1,0 +1,336 @@
+---
+title: "Package 'animalBreeding'"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+#output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{animalBreeding}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+library(ggplot2)
+```
+
+# Installation and Setup
+
+## from CRAN
+
+For installation, run the code below.
+
+```{r libraries, eval = FALSE, include=FALSE}
+library(devtools)
+```
+
+```{r setup, message=FALSE, comment=FALSE, cache=FALSE, results=FALSE}
+library(animalBreeding)
+```
+
+## from GitHub
+
+
+```{r, eval = FALSE}
+devtools::install_github(
+ # repo = @TODO
+)
+```
+
+# Usage
+
+## Offsprings of a single genotype
+
+### Calculation
+
+When the breeding set up is aimed at offsprings of a single genotype, 
+or simply a total number of born pups, one may use the following function to 
+calculate the required number of breedings. 
+
+Here we calculate how many FVB/N mouse matings are required to ensure that 
+at least 20 pups are born within a period of 3 days, 
+with the success probability of 90%. 
+
+
+
+```{r single genotype simple}
+n_breedings_single <- singleGenotype(
+  confidence_p = 0.90,
+  birth_days = 3,
+  n_offsprings = 20, 
+  sex_distribution = "unimportant",
+  desired_genotype_p = 0.25,
+  strain = "FVB/N")
+
+print(n_breedings_single)
+```
+
+Note that in the example above, both male and female pups are suitable for the 
+breeding experiment. 
+
+
+In case an experiment requires the same number of male and female pups, 
+one can use the following input:
+`sex_distribution = "balanced"`. 
+
+In case all pups must be male or all female, 
+use `sex_distribution = "all one sex"`.
+
+```{r single balanced}
+n_breedings_single <- singleGenotype(
+  confidence_p = 0.90,
+  birth_days = 3,
+  n_offsprings = 20, 
+  sex_distribution = "balanced",
+  desired_genotype_p = 0.25,
+  strain = "FVB/N")
+
+print(n_breedings_single)
+```
+
+
+### Plots
+
+```{r}
+probabilitiesPlot(n_breedings_single)
+expectBorn(n_breedings_single)
+```
+
+
+## Offsprings of multiple genotypes
+
+Assume we breed +/- and +/- mice. According to Mendel law (Punnett square), 
+the probabilities of offsprings +/+, +/- and -/- are 25%, 50% and 25%. 
+We only need 10 pups of -/- genotype, 
+and require them to be born within a perios of 3 days. 
+
+Further, we want all pups to be of one and the same sex (either male or female).
+
+Lastly, we want to ensure that the above requirements are met in at least 95 
+out of 100 trials (on average).
+
+
+```{r multi genotype simple}
+n_breedings_multi <- multiGenotype(
+  confidence_p = 0.95, 
+  birth_days = 30, 
+  genotypes_N = c(0,0,10), 
+  genotypes_p = c(0.25, 0.5, 0.25),
+  sex_distribution = "all one sex", 
+  strain = "FVB/N",
+  litter_average = 6)
+
+n_breedings_multi
+str(n_breedings_multi)
+```
+
+
+##
+
+One may want to know how many animals (in total) should be expected to be born with the breeding setup from above:
+```{r expect born simple}
+expectBorn(n_breedings_multi)
+```
+
+
+
+
+# Usage (not as simple, will be deprecated?)
+
+For instance, we need 200 offsprings, and we know the following: 
+
+- The average litter size of a fertile mouse is 7
+
+- The effective fertility of a mouse is 70%.
+
+- The desider number of offsprings is 200, and the desired confidence is 95%
+
+Then, the following arguments should be provided:
+
+```{r festing as example}
+calculate_needed_breedings(
+    confidence_p = 0.95, 
+    effective_fertility_p = 0.65, 
+    n_needed = 200, 
+    litter_mean = 7, 
+    litter_sd = 2.5, # default, in accordance with the Festing book
+    method = "festing" # or "poisson", "binomial", "empirical"
+    )
+```
+## Festing model in details
+
+### Reproducing Table 3.12
+
+To reproduce Table 3.12 from the "Animal production and breeding" textbook, 
+use the `calculate_needed_litters_textbook()` function. For instance, the number of 
+litters required to give 97.5% probability of achieving 25 animals, with the 
+average litter size being 4, is 11 (or 10 in the textbook).
+
+```{r festing textbook 1}
+calculate_needed_litters_textbook(
+    confidence_p = 0.975, 
+    litter_mean = 4, 
+    litter_sd = 2.5,
+    n_needed = 25)
+```
+
+Note that the calculation above uses values for the quantiles of the Gaussian 
+distribution. Quite likely, the authors of the textbook used a different 
+approximation from the one I use now, 
+which is why our value may be a little different from the one in the textbook. 
+
+In particular: The smallest integer that 
+guarantees $P\geq 0.975$ would be 11 in the case above.
+
+### Reproducing Table 3.13
+
+To reproduce Table 3.13 from the "Animal production and breeding" textbook, use 
+the `calculate_needed_breedings_textbook()` function. For instance, the number of 
+matings required to give 97.5% probability of achieving more than 15 
+litters, with the effective fertility being 20%, is 119 (according to 
+the textbook). 
+
+```{r festing textbook 2}
+calculate_needed_breedings_textbook(
+    confidence_p = 0.975, 
+    effective_fertility_p = 0.2, 
+    n_litters = 15, 
+    textbook_error = TRUE) # default FALSE, we should rename this argument or leave it out..
+
+```
+
+The values I get when implementing the exact same model are slightly 
+different, possibly due to the approximations the authors used, 
+and the subtle difference between $P(X \leq x)$ and $P(X < x)$.
+
+Thus, for the same figures as above, one would need 113 matings but not 119.
+
+```{r festing textbook 3}
+calculate_needed_breedings_textbook(
+    confidence_p = 0.975, 
+    effective_fertility_p = 0.2, 
+    n_litters = 15)
+```
+
+Below I check that the calculation was correct. To confirm that `pbinom` 
+calculates $P(X \leq x)$ see the `lower.tail` argument in the `?pbinom` 
+description.
+```{r festing check}
+# probability to get 10 or more litters from 110 breedings
+1 - pbinom(q = 14, size = 113, prob = 0.2)
+
+# probability to get 10 or more litters from 109 breedings
+1 - pbinom(q = 14, size = 112, prob = 0.2)
+
+# thus, 110 is the minimal required number of matings to have P>0.975
+```
+
+
+
+## Various methods (examples)
+
+To calculate the number of matings directly from the required number of 
+offsprings, run the following:
+
+```{r various methods}
+# should be close to poisson, we may remove this method later on
+calculate_needed_breedings(
+    confidence_p = 0.95, 
+    effective_fertility_p = 0.6, 
+    n_needed = 200, 
+    litter_mean = 7, 
+    method = "binomial"
+    )
+
+# the main alternative
+calculate_needed_breedings(
+    confidence_p = 0.95, 
+    effective_fertility_p = 0.6, 
+    n_needed = 200, 
+    litter_mean = 7, 
+    method = "poisson"
+    )
+
+
+# should be the same as poisson, because I provided an "empirical" observation
+# generated from a Poisson distribution
+calculate_needed_breedings(
+    confidence_p = 0.95, 
+    effective_fertility_p = 0.6, 
+    n_needed = 200, 
+    offsprings_n_sample = rpois(n = 1000, lambda = 7),
+    method = "empirical"
+    )
+
+# textbook
+calculate_needed_breedings(
+    confidence_p = 0.95, 
+    effective_fertility_p = 0.6, 
+    n_needed = 200, 
+    litter_mean = 7, 
+    litter_sd = 2.5,
+    method = "festing"
+    )
+
+```
+
+
+## Genotype-specific calculations
+
+Assume you need no less than 10 KO, 15 heterozygous and 5 WT offsprings to be 
+born, with the confidence of 95%. Effective fertility of the mice is 70%, and 
+the average litter size is 4. The parameter `genotypes_p=c(0.25, 0.5, 0.25)` 
+reflects standard Mendelian probablities for the respective genotypes, 
+and `genotypes_N = c(1,0,0)` specifies the desired number of offsprings.
+
+This is only implemented for the Poisson model at the moment.
+For the Festing model,unfortunately, this is not possible (since Normal 
+distribution cannot be combined with the binomial for the genotype drawing).
+
+```{r several genotypes}
+x <- breed_genotype(
+    confidence_p = 0.95, 
+    effective_fertility_p = 0.7, 
+    genotypes_p = c(0.25, 0.5, 0.25), 
+    genotypes_N = c(10,15,5),
+    litter_mean = 4, 
+    method = "poisson")
+x
+
+
+```
+
+<!--
+# Methods
+
+First, let us assume that every fertile animal $i$ produces $\xi_i$ offsprings.
+
+Also, let us assume that we conducted $K$ breeding events, out of which $\eta$ were 
+successful. According to Festing, $\eta$ follows a Binomial distribution defined 
+by the effective fertility of the animals. Namely, if the effective fertility 
+is $65\%$, then $p_{fert}=0.65$ and
+$$\eta \sim Binom(p_{fert}, K).$$
+
+Then, the total number of offsprings $\chi$ would be
+$$ \sum\limits_{i=1}^{\eta} \xi_i,$$
+where $\xi_i$ are i.i.d random variables.
+
+Unfortunately, we do not know the distribution of $\xi_i$, but we could make 
+some assumptions about it from some apriori knowledge. 
+
+Festing, for instance, assumes that $\xi_i$ is Normally distributed:
+$$\xi_i \sim N(\mu, \sigma=2.5),$$
+where $\mu$ is the average number of offsprings an animal produces, and the 
+variance $\sigma$ is fixed to $2.5$. 
+
+Alternatively, one could assume $\xi_i$ to come from Poisson or Binomial 
+distributions, or even estimate it empirically from the some 
+previously produced data. 
+
+--> 
+

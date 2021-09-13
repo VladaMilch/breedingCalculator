@@ -1,0 +1,23 @@
+Package: animalBreeding
+Type: Package
+Title: Sample size calculation for animal breeding experiments
+Version: 0.1.0
+Author: Vladislava Milchevskaya
+Maintainer: The package maintainer <milchv@gmail.com>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat
+VignetteBuilder: knitr
+Depends: 
+    R (>= 2.10),
+    distr,
+    pmultinom,
+    ggplot2,
+    ggpubr

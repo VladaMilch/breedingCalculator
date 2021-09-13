@@ -1,0 +1,14 @@
+strain_name  fertility  litter_mean
+129/SvJa  0.75  5.9
+A/J  0.65   6.3
+AKR/J  0.84 6.1
+BALB/cJ  0.47   5.2
+C3H/HeJ  0.86   5.7
+C3H/HeOuJ  0.99 6.4
+C56BL/6J  0.84  7.0
+C57_BL/10SnJ  0.67  6.3
+CBA/CaJ  0.96   6.9
+DBA/2J  0.75    5.4
+FVB/N  0.90 9.5
+SJL/J  0.72 6.0
+Festing 0.795   6.0
