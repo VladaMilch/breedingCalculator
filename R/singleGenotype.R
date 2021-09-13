@@ -56,7 +56,7 @@ singleGenotype <- function(
   birth_days = 4,
   desired_genotype_p = 1, 
   n_offsprings,
-  sex_distribution = c("unimportant", "all one sex", "balanced"),
+  sex_distribution = "unimportant", # or "all one sex" or "balanced"
   strain = "manual",
   method = "poisson",
   litter_average = NULL,
