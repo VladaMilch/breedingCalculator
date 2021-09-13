@@ -195,8 +195,7 @@ test_that("All strains work correctly",{
       genotypes_p = c(0,1), 
       genotypes_N = c(0,20), 
       strain = current_strain,
-      sex_distribution = "all one sex", 
-      litter_average = 6)
+      sex_distribution = "all one sex")
   }
 
 })
