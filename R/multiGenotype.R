@@ -25,8 +25,8 @@
 #' BALB/cJ, 
 #' C3H/HeJ, 
 #' C3H/HeOuJ, 
-#' C56BL/6J, 
-#' C57_BL/10SnJ, 
+#' C57BL/6J, 
+#' C57BL/10SnJ, 
 #' CBA/CaJ, 
 #' DBA/2J, 
 #' FVB/N 
@@ -45,7 +45,7 @@
 #'   genotypes_N = c(10,0,10), 
 #'   sex_distribution = "unimportant",
 #'   litter_average = 7,
-#'   strain = "C56BL/6J")
+#'   strain = "C57BL/6J")
 #' 
 #' @export
 multiGenotype <- function(
@@ -61,7 +61,7 @@ multiGenotype <- function(
 ){
   
   ################# integrity checks ###############
-
+  
   # confidence_p
   stopifnot(confidence_p < 1 & confidence_p > 0)
   # birth_days
@@ -72,7 +72,8 @@ multiGenotype <- function(
   
   # strain --> litter mean and fertility
   if (strain == "manual"){
-    effective_fertility_p = effective_fertility
+    fert_by_day <- c(13.4, 13.4, 35, 17.7) # as in Festing
+    effective_fertility_p <- cumsum(fert_by_day/sum(fert_by_day))[birth_days] * effective_fertility
     litter_mean = litter_average
     # do not do day adjustment here! so that to control the function output.. 
   }else{ # percentages from the Festing book, Table 3.11
@@ -98,14 +99,14 @@ multiGenotype <- function(
   # sex_distribution
   stopifnot(
     sex_distribution %in% c("unimportant", "all one sex", "balanced")
-    )
+  )
   # litter_mean
   if(!(litter_mean > 0)){
     stop("Average number of pups per litter should be a positive number.\n")
   }
   
   
-    
+  
   ################# calculation  ################
   
   if(sex_distribution == "unimportant"){

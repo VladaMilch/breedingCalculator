@@ -21,25 +21,12 @@ library(ggplot2)
 
 # Installation and Setup
 
-## from CRAN
-
-For installation, run the code below.
-
-```{r libraries, eval = FALSE, include=FALSE}
-library(devtools)
-```
-
-```{r setup, message=FALSE, comment=FALSE, cache=FALSE, results=FALSE}
-library(animalBreeding)
-```
-
-## from GitHub
-
+We used a GitHub repository to store the package, most recent updates and bug fixes will be there.
+One will require the `devtools` package to do the installation.
 
 ```{r, eval = FALSE}
-devtools::install_github(
- # repo = @TODO
-)
+library(devtools)
+devtools::install_github("VladaMilch/breedingCalculator")
 ```
 
 # Usage
@@ -117,7 +104,7 @@ out of 100 trials (on average).
 
 ```{r multi genotype simple}
 n_breedings_multi <- multiGenotype(
-  confidence_p = 0.95, 
+  confidence_p = 0.85, 
   birth_days = 30, 
   genotypes_N = c(0,0,10), 
   genotypes_p = c(0.25, 0.5, 0.25),
@@ -135,6 +122,13 @@ str(n_breedings_multi)
 One may want to know how many animals (in total) should be expected to be born with the breeding setup from above:
 ```{r expect born simple}
 expectBorn(n_breedings_multi)
+```
+
+## 
+
+How does the cofidence change based on the number of matings we execute? Maybe, there is a more optimal choice? 
+```{r}
+probabilitiesPlot(n_breedings_multi)
 ```
 
 
