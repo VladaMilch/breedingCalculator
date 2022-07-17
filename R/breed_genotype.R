@@ -6,7 +6,7 @@
 #' @export
 breed_genotype <- function(
     confidence_p,
-    effective_fertility_p,
+    fertility_p,
     genotypes_p = c(0.25,0.5,0.25),
     genotypes_N = c(0,0,10),
     only_Fe_Male = FALSE,
@@ -21,7 +21,7 @@ breed_genotype <- function(
     stopifnot(sum(genotypes_p)==1)
     stopifnot(all(genotypes_N>=0) & sum(genotypes_N)>0)
     stopifnot(confidence_p > 0 & confidence_p < 1)
-    stopifnot(effective_fertility_p > 0 & effective_fertility_p <= 1)
+    stopifnot(fertility_p > 0 & fertility_p <= 1)
     
     # additional requirement: by gender
     stopifnot(is.logical(only_Fe_Male))
@@ -38,7 +38,7 @@ breed_genotype <- function(
     if(method=="poisson"){
         doof1 <- generate_poisson_doof1(
             litter_mean = litter_mean, 
-            effective_fertility_p = effective_fertility_p)
+            fertility_p = fertility_p)
     }
     if(method=="binomial"){
         if(is.null(binomial_p))
@@ -49,7 +49,7 @@ breed_genotype <- function(
         doof1 <- generate_binomial_doof1(
             litter_mean = litter_mean, 
             binomial_p = binomial_p, 
-            effective_fertility_p = effective_fertility_p)
+            fertility_p = fertility_p)
     }
     if(method=="empirical"){
         if(is.null(offsprings_n_sample)){
@@ -58,7 +58,7 @@ breed_genotype <- function(
             method=empirical")
       }
         doof1 <- generate_empirical_doof1(
-            effective_fertility_p = effective_fertility_p,
+            fertility_p = fertility_p,
             offsprings_n_sample =  offsprings_n_sample)
     }
     if(method=="festing"){
@@ -79,7 +79,7 @@ breed_genotype <- function(
     breesetup <- breedingMulti(
       required_breedings = rebre,
       confidence_p = confidence_p, 
-      fertility_p = effective_fertility_p, 
+      fertility_p = fertility_p, 
       genotypes_p = genotypes_p, 
       genotypes_N = genotypes_N, 
       litter_mean = litter_mean, 
@@ -94,7 +94,7 @@ breed_genotype <- function(
 }
 
 generate_poisson_doof1 <- function(litter_mean, 
-                                   effective_fertility_p
+                                   fertility_p
 ){
     almost_certain_positive_support <- seq(
         1,
@@ -104,7 +104,7 @@ generate_poisson_doof1 <- function(litter_mean,
                    lambda = litter_mean)
     freqs <- freqs/sum(freqs)
     supp1 = as.numeric(c(0, almost_certain_positive_support))
-    prob1 <- c(1-effective_fertility_p, effective_fertility_p*freqs)
+    prob1 <- c(1-fertility_p, fertility_p*freqs)
     stopifnot(all.equal( sum(prob1), 1 ) )
     # distribution of offsprings for 1 mother
     doof1 <- distr::DiscreteDistribution(supp = supp1, prob = prob1)
@@ -115,7 +115,7 @@ generate_poisson_doof1 <- function(litter_mean,
 generate_binomial_doof1 <- function(
     litter_mean, 
     binomial_p, 
-    effective_fertility_p
+    fertility_p
 ){
     binomialSize = round(litter_mean/binomial_p)
     positive_support <- seq(1,round(litter_mean/binomial_p), 1)
@@ -125,14 +125,14 @@ generate_binomial_doof1 <- function(
         prob = binomial_p)
     freqs <- freqs/sum(freqs)
     supp1 = as.numeric(c(0, positive_support)) # full support
-    prob1 <- c(1-effective_fertility_p, effective_fertility_p*freqs)
+    prob1 <- c(1-fertility_p, fertility_p*freqs)
     # distribution of offsprings for 1 mother
     doof1 <- distr::DiscreteDistribution(supp = supp1, prob = prob1)
     return(doof1)
 }
 
 generate_empirical_doof1 <- function(
-    effective_fertility_p = effective_fertility_p, 
+    fertility_p = fertility_p, 
     offsprings_n_sample = offsprings_n_sample
 ){
     stopifnot(all(offsprings_n_sample >= 0))
@@ -145,7 +145,7 @@ generate_empirical_doof1 <- function(
 
     freqs <- table(offsprings_n_sample)/length(offsprings_n_sample)
     supp1 = as.numeric(c(0, names(freqs)))
-    prob1 <- c(1-effective_fertility_p, effective_fertility_p*freqs)
+    prob1 <- c(1-fertility_p, fertility_p*freqs)
     stopifnot(sum(prob1)==1)
     
     # distribution of offsprings for 1 mother

@@ -1,13 +1,13 @@
 calculate_needed_breedings_empirical <- function(
     confidence_p = confidence_p, 
-    effective_fertility_p = effective_fertility_p, 
+    fertility_p = fertility_p, 
     n_needed = n_needed, 
     offsprings_n_sample = offsprings_n_sample
 ){
     offsprings_n_sample <- offsprings_n_sample[which(offsprings_n_sample!=0)]
     freqs <- table(offsprings_n_sample)/length(offsprings_n_sample)
     supp1 = as.numeric(c(0, names(freqs)))
-    prob1 <- c(1-effective_fertility_p, effective_fertility_p*freqs)
+    prob1 <- c(1-fertility_p, fertility_p*freqs)
     
     tol = 0.1^5
     stopifnot( abs( sum(prob1)-1) < tol )
@@ -48,6 +48,6 @@ calculate_needed_breedings_empirical <- function(
 # library("DEoptim")
 # ?opti
 # calculate_needed_breedings_empirical(confidence_p = 0.9, 
-#                                      effective_fertility_p = 0.7, 
+#                                      fertility_p = 0.7, 
 #                                      n_needed = 100, 
 #                                      offsprings_n_sample = c(1,1,1,2,3,4,5,6,7,8,8,8,8))

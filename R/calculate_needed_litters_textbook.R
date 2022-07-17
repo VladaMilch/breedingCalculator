@@ -22,7 +22,7 @@
 #' @examples
 #' calculate_needed_breedings_textbook(
 #'     confidence_p=0.95,
-#'     effective_fertility_p=0.6,
+#'     fertility_p=0.6,
 #'     n_litters=10)
 #'
 #' @export

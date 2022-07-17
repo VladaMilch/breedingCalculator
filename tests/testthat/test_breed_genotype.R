@@ -8,14 +8,14 @@ test_that(desc = "Falling glacefully: Confidence",{
   expect_error(
     breed_genotype(
       confidence_p = 1, 
-      effective_fertility_p = 1, 
+      fertility_p = 1, 
       litter_mean = 7, 
       method = "festing"))
   
   expect_error(
     breed_genotype(
       confidence_p = 0, 
-      effective_fertility_p = 1, 
+      fertility_p = 1, 
       litter_mean = 7, 
       method = "festing"))
   
@@ -25,14 +25,14 @@ test_that(desc = "Falling glacefully: Effective fertility",{
   expect_error(
     breed_genotype(
       confidence_p = 0.5, 
-      effective_fertility_p = 0, 
+      fertility_p = 0, 
       litter_mean = 7, 
       method = "festing"))
   
   expect_error(
     breed_genotype(
       confidence_p = 0.5, 
-      effective_fertility_p = 1.1, 
+      fertility_p = 1.1, 
       litter_mean = 7, 
       method = "festing"))
   
@@ -42,7 +42,7 @@ test_that(desc = "Falling glacefully: Methods general",{
   expect_error(
     breed_genotype(
       confidence_p = 0.5, 
-      effective_fertility_p = 0.5, 
+      fertility_p = 0.5, 
       litter_mean = 7, 
       method = "tet"))
 })
@@ -52,7 +52,7 @@ test_that(desc = "Falling glacefully: Offstrings, litter",{
   expect_error(
     breed_genotype(
       confidence_p = 0.5, 
-      effective_fertility_p = 0.5, 
+      fertility_p = 0.5, 
       genotypes_N = c(0), 
       genotypes_p = 1,
       litter_mean = 7, 
@@ -61,7 +61,7 @@ test_that(desc = "Falling glacefully: Offstrings, litter",{
   expect_error(
     breed_genotype(
       confidence_p = 0.5, 
-      effective_fertility_p = 0.5, 
+      fertility_p = 0.5, 
       litter_mean = 0, 
       method = "festing"))
   
@@ -75,14 +75,14 @@ test_that("Calculation with 1 genotype agrees with
     expect_equal(
         breed_genotype(
           confidence_p = 0.9, 
-          effective_fertility_p = 0.6,
+          fertility_p = 0.6,
           genotypes_p = c(1,0), 
           genotypes_N = c(100,0),
           litter_mean = 7, 
           method = "poisson")$required_breedings,
         calculate_needed_breedings(
             confidence_p = 0.9, 
-            effective_fertility_p = 0.6, 
+            fertility_p = 0.6, 
             n_needed = 100, 
             litter_mean = 7, 
             method = "poisson")
@@ -107,7 +107,7 @@ test_that("Calculation with 1 genotype agrees with
 #     empi_confidence <- sum(empitmp[,1]>30 & empitmp[,2]>30)/10^5
 #     expect_equal(breed_genotype(
 #       confidence_p = empi_confidence-0.1^3, 
-#       effective_fertility_p = 1,
+#       fertility_p = 1,
 #       genotypes_p = c(0.4,0.6), 
 #       genotypes_N = c(31,31),
 #       litter_mean = 8, 
@@ -115,7 +115,7 @@ test_that("Calculation with 1 genotype agrees with
 #     
 #     expect_equal(breed_genotype(
 #       confidence_p = empi_confidence + 0.1^3, 
-#       effective_fertility_p = 1,
+#       fertility_p = 1,
 #       genotypes_p = c(0.4,0.6), 
 #       genotypes_N = c(31,31),
 #       litter_mean = 8, 

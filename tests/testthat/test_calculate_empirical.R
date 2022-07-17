@@ -6,12 +6,12 @@ test_that(desc = "Empirical calculation is correct",{
     expect_equal(
         calculate_needed_breedings_empirical(
             confidence_p = 0.9, 
-            effective_fertility_p = 1, 
+            fertility_p = 1, 
             n_needed = 8, 
             offsprings_n_sample = rpois(n=1000, lambda = 7)),
         calculate_needed_breedings_poisson(
             confidence_p = 0.9, 
-            effective_fertility_p = 1, 
+            fertility_p = 1, 
             n_needed = 8, 
             litter_mean = 7)
     )
@@ -19,7 +19,7 @@ test_that(desc = "Empirical calculation is correct",{
     expect_equal(
         calculate_needed_breedings_empirical(
             confidence_p = 0.5, 
-            effective_fertility_p = 1, 
+            fertility_p = 1, 
             n_needed = 11, 
             offsprings_n_sample = rep(2,100)),
         6
@@ -27,7 +27,7 @@ test_that(desc = "Empirical calculation is correct",{
     expect_equal(
         calculate_needed_breedings_empirical(
             confidence_p = 0.999, 
-            effective_fertility_p = 1, 
+            fertility_p = 1, 
             n_needed = 11, 
             offsprings_n_sample = rep(2,100)),
         6
@@ -37,7 +37,7 @@ test_that(desc = "Empirical calculation is correct",{
     expect_equal(
         calculate_needed_breedings_empirical(
             confidence_p = 0.99, 
-            effective_fertility_p = 1, 
+            fertility_p = 1, 
             n_needed = 8, 
             offsprings_n_sample = sample(
                 c(2,3,4,5), 
@@ -48,7 +48,7 @@ test_that(desc = "Empirical calculation is correct",{
     expect_equal(
         calculate_needed_breedings_empirical(
             confidence_p = 0.9, 
-            effective_fertility_p = 1, 
+            fertility_p = 1, 
             n_needed = 8, 
             offsprings_n_sample = sample(
                 c(2,3,4,5), 
@@ -60,7 +60,7 @@ test_that(desc = "Empirical calculation is correct",{
 
   calculate_needed_breedings_empirical(
     confidence_p = 0.95, 
-    effective_fertility_p = 1, 
+    fertility_p = 1, 
     n_needed = 8, 
     offsprings_n_sample = sample(c(2,3,4,5), 
                                  size = 100, 
@@ -79,7 +79,7 @@ test_that(desc = "Empirical calculation is correct",{
   
   calculate_needed_breedings_empirical(
     confidence_p = 0.5, 
-    effective_fertility_p = 1, 
+    fertility_p = 1, 
     n_needed = 11, 
     offsprings_n_sample = rep(2,100))
   

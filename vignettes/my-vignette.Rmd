@@ -29,6 +29,10 @@ library(devtools)
 devtools::install_github("VladaMilch/breedingCalculator")
 ```
 
+```{r}
+library(breedingCalculator)
+```
+
 # Usage
 
 ## Offsprings of a single genotype
@@ -140,7 +144,7 @@ For instance, we need 200 offsprings, and we know the following:
 
 - The average litter size of a fertile mouse is 7
 
-- The effective fertility of a mouse is 70%.
+- The fertility of a mouse is 70%.
 
 - The desider number of offsprings is 200, and the desired confidence is 95%
 
@@ -149,7 +153,7 @@ Then, the following arguments should be provided:
 ```{r festing as example}
 calculate_needed_breedings(
     confidence_p = 0.95, 
-    effective_fertility_p = 0.65, 
+    fertility_p = 0.65, 
     n_needed = 200, 
     litter_mean = 7, 
     litter_sd = 2.5, # default, in accordance with the Festing book
@@ -192,7 +196,7 @@ the textbook).
 ```{r festing textbook 2}
 calculate_needed_breedings_textbook(
     confidence_p = 0.975, 
-    effective_fertility_p = 0.2, 
+    fertility_p = 0.2, 
     n_litters = 15, 
     textbook_error = TRUE) # default FALSE, we should rename this argument or leave it out..
 
@@ -207,7 +211,7 @@ Thus, for the same figures as above, one would need 113 matings but not 119.
 ```{r festing textbook 3}
 calculate_needed_breedings_textbook(
     confidence_p = 0.975, 
-    effective_fertility_p = 0.2, 
+    fertility_p = 0.2, 
     n_litters = 15)
 ```
 
@@ -235,7 +239,7 @@ offsprings, run the following:
 # should be close to poisson, we may remove this method later on
 calculate_needed_breedings(
     confidence_p = 0.95, 
-    effective_fertility_p = 0.6, 
+    fertility_p = 0.6, 
     n_needed = 200, 
     litter_mean = 7, 
     method = "binomial"
@@ -244,7 +248,7 @@ calculate_needed_breedings(
 # the main alternative
 calculate_needed_breedings(
     confidence_p = 0.95, 
-    effective_fertility_p = 0.6, 
+    fertility_p = 0.6, 
     n_needed = 200, 
     litter_mean = 7, 
     method = "poisson"
@@ -255,7 +259,7 @@ calculate_needed_breedings(
 # generated from a Poisson distribution
 calculate_needed_breedings(
     confidence_p = 0.95, 
-    effective_fertility_p = 0.6, 
+    fertility_p = 0.6, 
     n_needed = 200, 
     offsprings_n_sample = rpois(n = 1000, lambda = 7),
     method = "empirical"
@@ -264,7 +268,7 @@ calculate_needed_breedings(
 # textbook
 calculate_needed_breedings(
     confidence_p = 0.95, 
-    effective_fertility_p = 0.6, 
+    fertility_p = 0.6, 
     n_needed = 200, 
     litter_mean = 7, 
     litter_sd = 2.5,
@@ -289,7 +293,7 @@ distribution cannot be combined with the binomial for the genotype drawing).
 ```{r several genotypes}
 x <- breed_genotype(
     confidence_p = 0.95, 
-    effective_fertility_p = 0.7, 
+    fertility_p = 0.7, 
     genotypes_p = c(0.25, 0.5, 0.25), 
     genotypes_N = c(10,15,5),
     litter_mean = 4, 

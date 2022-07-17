@@ -32,7 +32,7 @@
 #' @param method takes values "festing" or "poisson"
 #' @param litter_average only used when method="manual", the average number 
 #' of pups in a litter (litter mean)
-#' @param effective_fertility only used when method="manual", the probability 
+#' @param fertility only used when method="manual", the probability 
 #' that withing the required time period a mouse will produce at least one pup
 #'
 #'@examples
@@ -60,7 +60,7 @@ singleGenotype <- function(
   strain = "manual",
   method = "poisson",
   litter_average = NULL,
-  effective_fertility = NULL
+  fertility = NULL
 ){
   if(desired_genotype_p==1){
     genotypes_p_current <- c(1)
@@ -79,7 +79,7 @@ singleGenotype <- function(
     sex_distribution = sex_distribution, 
     strain = strain, 
     litter_average = litter_average, 
-    effective_fertility = effective_fertility)
+    fertility = fertility)
   
   return(nbre)
 }

@@ -8,7 +8,7 @@
 #'
 #' @param confidence_p desired confidence level (probability to achieve 
 #' n_needed offsprings), a number between 0 and 1, excluding 1
-#' @param effective_fertility_p how likely is an animal to be fertile, a number between 0 and 1, including 1
+#' @param fertility_p how likely is an animal to be fertile, a number between 0 and 1, including 1
 #' @param n_needed desired total number of offsprings 
 #' @param litter_mean average number of offsprings one fertile animal produces
 #'
@@ -16,7 +16,7 @@
 #'
 calculate_needed_breedings_poisson <-   function(
     confidence_p,
-    effective_fertility_p,
+    fertility_p,
     n_needed,
     litter_mean,
     search_strarting_point = 1
@@ -24,7 +24,7 @@ calculate_needed_breedings_poisson <-   function(
     freqs_r <- dpois(x = seq(1,round(4*litter_mean), 1), lambda = litter_mean)
     freqs <- freqs_r/sum(freqs_r)
     supp1 = as.numeric(c(0, seq(1,round(4*litter_mean))))
-    prob1 <- c(1-effective_fertility_p, effective_fertility_p*freqs)
+    prob1 <- c(1-fertility_p, fertility_p*freqs)
     stopifnot(   abs(1-sum(prob1)) < 0.1^5   )
     
     doof1 <- distr::DiscreteDistribution(supp = supp1, prob = prob1)

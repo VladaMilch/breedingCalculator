@@ -52,12 +52,12 @@ multiGenotype <- function(
   confidence_p = 0.9,
   birth_days = 3,
   genotypes_p = c(0.25,0.5,0.25),
-  genotypes_N = c(0,0,10),  
+  genotypes_N = c(10,0,10),  
   genotype_names = NULL,
   sex_distribution = c("unimportant", "all one sex", "balanced"),
   strain="Festing", # http://www.informatics.jax.org/silver/tables/table4-1.shtml
   litter_average = NULL,
-  effective_fertility = NULL
+  fertility = NULL
 ){
   
   ################# integrity checks ###############
@@ -73,16 +73,16 @@ multiGenotype <- function(
   # strain --> litter mean and fertility
   if (strain == "manual"){
     fert_by_day <- c(13.4, 13.4, 35, 17.7) # as in Festing
-    effective_fertility_p <- cumsum(fert_by_day/sum(fert_by_day))[birth_days] * effective_fertility
+    fertility_p <- cumsum(fert_by_day/sum(fert_by_day))[birth_days] * fertility
     litter_mean = litter_average
     # do not do day adjustment here! so that to control the function output.. 
   }else{ # percentages from the Festing book, Table 3.11
     strain_params = strain_f_adjust(
       birth_days = birth_days, 
       strain = strain)
-    effective_fertility_p = strain_params$fertility
+    fertility_p = strain_params$fertility
     litter_mean = strain_params$lit_mean
-    try( if(!is.null(litter_average) | !is.null(effective_fertility))
+    try( if(!is.null(litter_average) | !is.null(fertility))
       warning("Litter mean and effective fertility parameters are overwritten 
               because a particular mouse strain is chosen. If the input 
               parameters should be used, choose strain='manual'.")
@@ -112,7 +112,7 @@ multiGenotype <- function(
   if(sex_distribution == "unimportant"){
     breesetup <- breed_genotype(
       confidence_p = confidence_p, 
-      effective_fertility_p = effective_fertility_p, 
+      fertility_p = fertility_p, 
       genotypes_p = genotypes_p,
       genotypes_N = genotypes_N, 
       litter_mean = litter_mean, 
@@ -121,7 +121,7 @@ multiGenotype <- function(
   if(sex_distribution == "all one sex"){
     breesetup <- breed_genotype(
       confidence_p = confidence_p, 
-      effective_fertility_p = effective_fertility_p, 
+      fertility_p = fertility_p, 
       genotypes_p = c(genotypes_p/2, 0.5),
       genotypes_N = c(genotypes_N, 0), 
       litter_mean = litter_mean, 
@@ -134,7 +134,7 @@ multiGenotype <- function(
     }
     breesetup <- breed_genotype(
       confidence_p = confidence_p, 
-      effective_fertility_p = effective_fertility_p, 
+      fertility_p = fertility_p, 
       genotypes_p = c(genotypes_p/2, genotypes_p/2),
       genotypes_N = c(genotypes_N, genotypes_N)/2, 
       litter_mean = litter_mean, 

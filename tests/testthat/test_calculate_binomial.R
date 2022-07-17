@@ -18,7 +18,7 @@ test_that("Binomial calculation correct: p=0.5",{
         2,
         calculate_needed_breedings_binomial(
             0.88, 
-            effective_fertility_p = fertility, 
+            fertility_p = fertility, 
             n_needed, 
             litter_mean = litmean)
     )
@@ -27,7 +27,7 @@ test_that("Binomial calculation correct: p=0.5",{
         1,
         calculate_needed_breedings_binomial(
             0.87, 
-            effective_fertility_p = fertility, 
+            fertility_p = fertility, 
             n_needed, 
             litter_mean = litmean)
     )
@@ -57,7 +57,7 @@ test_that("Binomial calculation correct: p!=0.5",{
       2,
       calculate_needed_breedings_binomial(
         confidence_p = 0.8,
-        effective_fertility_p = fertility, 
+        fertility_p = fertility, 
         n_needed, 
         binomial_p = 0.2,
         litter_mean = litmean)
@@ -67,7 +67,7 @@ test_that("Binomial calculation correct: p!=0.5",{
       3,
       calculate_needed_breedings_binomial(
         confidence_p = 0.85,
-        effective_fertility_p = fertility, 
+        fertility_p = fertility, 
         n_needed, 
         binomial_p = 0.2,
         litter_mean = litmean)
@@ -88,7 +88,7 @@ test_that("Binomial calculation correct: p!=0.5",{
   #   # expect_equal(K,
   #       calculate_needed_breedings_binomial(
   #           confidence_p, 
-  #           effective_fertility_p = fertility, 
+  #           fertility_p = fertility, 
   #           n_needed, 
   #           litter_mean = litmean)
   #   

@@ -4,7 +4,7 @@
 #' At the moment only one model is implemented (the textbook).
 #'
 #' @param confidence_p a number between 0 and 1
-#' @param effective_fertility_p a number between 0 and 1
+#' @param fertility_p a number between 0 and 1
 #' @param litter_mean the average litter size of the bred animals
 #' @param litter_sd standart deviation of the litter size, equals 2.5
 #' by default - as specified in the textbook
@@ -17,7 +17,7 @@
 #' @examples
 #' calculate_needed_breedings(
 #'     confidence_p=0.95,
-#'     effective_fertility_p=0.6,
+#'     fertility_p=0.6,
 #'     n_needed = 30,
 #'     litter_mean = 7,
 #'     litter_sd = 2.5,
@@ -32,7 +32,7 @@
 #'
 #' @param confidence_p desired confidence level (probability to achieve 
 #' n_needed offsprings), a number between 0 and 1, excluding 1
-#' @param effective_fertility_p how likely is an animal to be fertile, a number 
+#' @param fertility_p how likely is an animal to be fertile, a number 
 #' between 0 and 1, including 1
 #' @param n_needed desired total number of offsprings 
 #' @param litter_mean average number of offsprings one fertile animal produces, 
@@ -52,7 +52,7 @@
 #' @export
 calculate_needed_breedings <- function(
   confidence_p,
-  effective_fertility_p,
+  fertility_p,
   n_needed,
   litter_mean = NULL,
   offsprings_n_sample = NULL, # should be a large vector, n of offs for a single mouse
@@ -77,7 +77,7 @@ calculate_needed_breedings <- function(
       n_neede=n_needed)
     nbre <- calculate_needed_breedings_textbook(
       confidence_p=confidence_p1,
-      effective_fertility_p=effective_fertility_p,
+      fertility_p=fertility_p,
       n_litters=nlit
     )
     return(nbre)
@@ -86,7 +86,7 @@ calculate_needed_breedings <- function(
   #     stopifnot(litter_mean > 0)
   #     nbre <- calculate_needed_breedings_binomial(
   #         confidence_p = confidence_p, 
-  #         effective_fertility_p = effective_fertility_p, 
+  #         fertility_p = fertility_p, 
   #         n_needed = n_needed, 
   #         litter_mean = litter_mean
   #     )
@@ -95,7 +95,7 @@ calculate_needed_breedings <- function(
   if(method=="empirical"){
     nbre <- calculate_needed_breedings_empirical(
       confidence_p = confidence_p, 
-      effective_fertility_p = effective_fertility_p, 
+      fertility_p = fertility_p, 
       n_needed = n_needed, 
       offsprings_n_sample = offsprings_n_sample
     )
@@ -105,7 +105,7 @@ calculate_needed_breedings <- function(
     stopifnot(litter_mean > 0)
     nbre <- calculate_needed_breedings_poisson(
       confidence_p = confidence_p, 
-      effective_fertility_p = effective_fertility_p, 
+      fertility_p = fertility_p, 
       n_needed = n_needed, 
       litter_mean = litter_mean
     )

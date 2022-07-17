@@ -26,7 +26,7 @@
 #' #' @param method takes values "festing" or "poisson"
 #' #' @param litter_average only used when method="manual", the average number 
 #' #' of pups in a litter (litter mean)
-#' #' @param effective_fertility only used when method="manual", the probability 
+#' #' @param fertility only used when method="manual", the probability 
 #' #' that withing the required time period a mouse will produce at least one pup
 #' #'
 #' #'@examples
@@ -52,7 +52,7 @@
 #'   strain = "manual",
 #'   method = "poisson",
 #'   litter_average = NULL,
-#'   effective_fertility = NULL
+#'   fertility = NULL
 #' ){
 #'   # arguments needed for every function
 #'   stopifnot(confidence_p < 1 & confidence_p > 0)
@@ -63,18 +63,18 @@
 #'     {stop("birth_days can only take whole positive values (1,2,3,...) \n")} 
 #'   )
 #'   
-#'   # birthday --> effective_fertility_p
+#'   # birthday --> fertility_p
 #'   if (strain == "manual"){
-#'     effective_fertility_p = effective_fertility
+#'     fertility_p = fertility
 #'     litter_mean = litter_average
 #'     # do not do day adjustment here! so that to control the function output.. 
 #'   }else{ # percentages from the Festing book, Table 3.11
 #'     strain_params = strain_f_adjust(
 #'       birth_days = birth_days, 
 #'       strain = strain)
-#'     effective_fertility_p = strain_params$fertility
+#'     fertility_p = strain_params$fertility
 #'     litter_mean = strain_params$lit_mean
-#'     try( if(!is.null(litter_average) | !is.null(effective_fertility))
+#'     try( if(!is.null(litter_average) | !is.null(fertility))
 #'       warning("Litter mean and effective fertility parameters are overwritten 
 #'               because a particular mouse strain is chosen. If the input 
 #'               parameters should be used, choose strain='manual'.")
@@ -98,7 +98,7 @@
 #'   
 #'   nbre <- calculate_needed_breedings(
 #'     confidence_p = confidence_p, 
-#'     effective_fertility_p = effective_fertility_p,
+#'     fertility_p = fertility_p,
 #'     n_needed = n_offsprings, 
 #'     litter_mean = litter_mean,
 #'     litter_sd = litter_sd,
